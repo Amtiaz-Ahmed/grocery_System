@@ -2,17 +2,13 @@
 
 ## 📌 Overview
 
-The **Grocery Store Management System** is a full-stack web application designed to streamline the daily operations of a grocery store. It enables store owners and employees to manage inventory, sales, user roles, and reporting efficiently — all from a centralized dashboard.
+The **Grocery Store Management System** is a local Windows app for managing grocery inventory, sales, and reports from a dashboard.
 
 Built with **Node.js**, **Express.js**, and **MySQL**, the system provides a reliable and responsive interface, ensuring a smooth user experience on desktops, tablets, and smartphones.
 
 ---
 
 ## 🚀 Features
-
-- 🔐 **User Management**
-  - Role-based access (Admin, Cashier)
-  - CRUD operations on user accounts
 
 - 📦 **Inventory Management**
   - Add, update, delete products
@@ -24,9 +20,11 @@ Built with **Node.js**, **Express.js**, and **MySQL**, the system provides a rel
   - Manage multiple payment methods
 
 - 📊 **Reporting Dashboard**
-  - View sales statistics
+  - Review sales, orders, and products sold by day, week, or month
+  - See new-product stock entries and restock activity for the selected period
+  - Compare product sales with current stock and low-stock thresholds
   - Monitor low-stock items
-  - Track user activities
+  - Review inventory stock changes
 
 - 📱 **Responsive UI**
   - Mobile-friendly design
@@ -49,47 +47,25 @@ Built with **Node.js**, **Express.js**, and **MySQL**, the system provides a rel
 
 ## ⚙️ Installation Guide
 
-Follow these steps to set up the project locally:
+For a Windows client laptop:
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/GeetanshMohindru/Grocery-Store-Management-System.git
-   cd Grocery-Store-Management-System
-   ```
+1. Install XAMPP and Node.js LTS.
+2. Start MySQL in XAMPP. In phpMyAdmin, import [`client_grocery_dump.sql`](./dbms%20project/client_grocery_dump.sql) to create the database with its current application data. Use [`grocery_schema.sql`](./dbms%20project/grocery_schema.sql) only if you want an empty database; create/select that database first and do not import both.
+3. Copy [`dbms project/.env.example`](./dbms%20project/.env.example) to `dbms project\.env` and adjust the database settings if the XAMPP MySQL account is not the default.
+4. Double-click [`Start Grocery System.bat`](./dbms%20project/Start%20Grocery%20System.bat). On the first run it installs Node packages and needs internet access; then it opens the dashboard.
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+For daily use, start MySQL in XAMPP and click the launcher. The dashboard has no login and is bound to `127.0.0.1`, so it is intended for this laptop only.
 
-3. **Set up the MySQL database**
-   - Open **PHPMyAdmin**.
-   - Create a new database (e.g., `grocery_db`).
-   - Import the SQL file located in the `dbms project` directory.
+## Automatic reports and database backups
 
-4. **Configure environment variables**
-   - Create a `.env` file in the root directory:
-     ```
-     DB_HOST=localhost
-     DB_USER=your_mysql_username
-     DB_PASSWORD=your_mysql_password
-     DB_NAME=grocery_db
-     ```
+When the server starts, it creates any missing daily sales CSVs and monthly sales CSVs, then saves a database SQL backup. It checks every minute and saves one database backup per calendar day. Files are saved under `Desktop\GroceryBackups` in the Windows account running the server, with sales reports in `DailySales` and `MonthlySales`, and SQL backups in `Database`.
 
-5. **Start the application**
-   ```bash
-   npm start
-   ```
-
-6. **Access the web app**
-   - Open your browser and navigate to:  
-     `http://localhost:3000`
+The schedule follows the computer's local time; set the client's Windows time zone to Asia/Karachi for midnight Pakistan time. The server must be running for jobs to run at midnight. If the computer is off, completed sales reports are generated after the server starts again; a current database backup is also made at startup. Keep another copy of `GroceryBackups` on an external drive or remote storage if you need protection from laptop loss or disk failure. A backup stored only on the laptop cannot protect against failure of that laptop.
 
 ---
 
 ## 🧪 Usage
 
-- 🔑 **Login**: Use the provided credentials or create a new user.
 - 📁 **Inventory**: Add, update, and delete grocery products.
 - 🧾 **Sales**: Record transactions and view receipts.
 - 📉 **Reports**: Monitor key business metrics.
@@ -100,14 +76,13 @@ Follow these steps to set up the project locally:
 
 ```
 Grocery-Store-Management-System/
-│
-├── public/                # Frontend assets (CSS, JS)
-├── routes/                # Route handlers
-├── views/                 # HTML views (EJS or similar templating)
-├── dbms project/          # SQL dump and sample data
-├── .env                   # Environment config
-├── app.js                 # Main server file
-└── README.md              # Project documentation
+├── dbms project/
+│   ├── public/             # Dashboard page, styles, and browser script
+│   ├── index_admin.js      # Local Node.js server
+│   ├── client_grocery_dump.sql
+│   ├── grocery_schema.sql
+│   └── Start Grocery System.bat
+└── README.md
 ```
 
 ---
